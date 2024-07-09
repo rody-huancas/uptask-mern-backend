@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export type ProjectType = Document & {
   projectName: string;
-  clientName: string;
+  clientName : string;
   description: string;
 };
 
