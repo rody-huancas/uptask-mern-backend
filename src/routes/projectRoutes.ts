@@ -92,4 +92,13 @@ router.delete(
   TaskController.deleteTask
 );
 
+router.put(
+  '/:projectId/tasks/:taskId/status',
+  param("taskId").isMongoId().withMessage("ID no válido"),
+  body("status")
+    .notEmpty().withMessage("El Estado de la Tarea es Obligatorio"),
+  handleInputErrors,
+  TaskController.updateStatus
+);
+
 export default router;
