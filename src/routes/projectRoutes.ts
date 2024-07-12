@@ -4,7 +4,7 @@ import { TaskController } from "../controllers/TaskController";
 import { ProjectController } from "../controllers/ProjectController";
 import { handleInputErrors } from "../middleware/validation";
 import { projectExists } from "../middleware/project";
-import { taskExists } from "../middleware/task";
+import { taskBelongsToProject, taskExists } from "../middleware/task";
 
 const router = Router();
 
@@ -94,6 +94,7 @@ router.delete(
 );
 
 router.param('taskId', taskExists)
+router.param('taskId', taskBelongsToProject)
 
 router.put(
   '/:projectId/tasks/:taskId/status',
