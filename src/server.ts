@@ -1,5 +1,6 @@
 import cors from "cors";
 import dotenv from "dotenv";
+import morgan from "morgan";
 import express from "express";
 import projectRoutes from "./routes/projectRoutes";
 
@@ -17,7 +18,10 @@ const app = express();
 // cors
 app.use(cors(corsConfig));
 
-// Parsear las solicitudes JSON
+// logging
+app.use(morgan('dev'))
+
+// leer datos del formulario
 app.use(express.json());
 
 // rutas
