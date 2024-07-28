@@ -51,13 +51,13 @@ export class AuthController {
 
       if (!tokenExists) {
         const error = new Error("Token inválido");
-        return res.status(404).json({ error: error.message });
+        return res.status(401).json({ error: error.message });
       }
 
       const user = await User.findById(tokenExists.user);
       user.confirmed = true;
 
-      await Promise.allSettled([user.save(), tokenExists.deleteOne()]);
+      await Promise.allSettled([ user.save(), tokenExists.deleteOne() ]);
 
       res.send("Cuenta confirmada correctamente");
     } catch (error) {
@@ -101,6 +101,40 @@ export class AuthController {
       }
 
       res.send("Autenticado");
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
+
+  static requestConfirmationCode = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+
+      // Ususario existe
+      const user = await User.findOne({ email });
+      if (!user) {
+        const error = new Error("El Usuario no está registrado.");
+        return res.status(404).json({ error: error.message });
+      }
+
+      if (user.confirmed) {
+        const error = new Error("El Usuario ya está confirmado.");
+        return res.status(403).json({ error: error.message });
+      }
+
+      // generar token
+      const token = new Token();
+      token.token = generateToken();
+      token.user = user.id;
+
+      // enviar email
+      AuthEmail.sendConfirmationEmail({
+        email: user.email, name: user.name, token: token.token
+      });
+
+      await Promise.allSettled([user.save(), token.save()]);
+
+      res.send("Se envió un nuevo token, revisa tu correo para confirmarla.");
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
