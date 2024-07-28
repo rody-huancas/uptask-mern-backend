@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
+
+import { projectExists } from "../middleware/project";
 import { TaskController } from "../controllers/TaskController";
 import { ProjectController } from "../controllers/ProjectController";
 import { handleInputErrors } from "../middleware/validation";
-import { projectExists } from "../middleware/project";
 import { taskBelongsToProject, taskExists } from "../middleware/task";
 
 const router = Router();

@@ -27,6 +27,15 @@ router.post('/confirm-account',
     .notEmpty().withMessage('El Token no puede ir'),
   handleInputErrors,
   AuthController.confirmAccount
-)
+);
+
+router.post('/login',
+  body("email")
+    .isEmail().withMessage("El correo electrónico no es válido"),
+  body("password")
+    .notEmpty().withMessage("La contraseña no puede ir vacía"),
+  handleInputErrors,
+  AuthController.login
+);
 
 export default router;
