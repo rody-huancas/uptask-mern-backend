@@ -139,4 +139,72 @@ export class AuthController {
       res.status(500).json({ error: "Hubo un error" });
     }
   };
+
+  static forgotPassword = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+
+      // Ususario existe
+      const user = await User.findOne({ email });
+      if (!user) {
+        const error = new Error("El Usuario no está registrado.");
+        return res.status(404).json({ error: error.message });
+      }
+
+      // generar token
+      const token = new Token();
+      token.token = generateToken();
+      token.user = user.id;
+      await token.save()
+
+      // enviar email
+      AuthEmail.sendPasswordResetToken({
+        email: user.email, name: user.name, token: token.token
+      });
+
+      res.send("Revisa tu correo para las instrucciones.");
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
+
+  static validateToken = async (req: Request, res: Response) => {
+    try {
+      const { token } = req.body;
+
+      const tokenExists = await Token.findOne({ token });
+
+      if (!tokenExists) {
+        const error = new Error("Token inválido");
+        return res.status(401).json({ error: error.message });
+      }
+
+      res.send("Token válido, define tu nueva contraseña.")
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
+
+  static updatePasswordWithToken = async (req: Request, res: Response) => {
+    try {
+      const { token } = req.params;
+      const { password } = req.body;
+
+      const tokenExists = await Token.findOne({ token });
+
+      if (!tokenExists) {
+        const error = new Error("Token inválido");
+        return res.status(401).json({ error: error.message });
+      }
+
+      const user = await User.findById(tokenExists.user);
+      user.password = await hashPassword(req.body.password);
+
+      await Promise.allSettled([ user.save(), tokenExists.deleteOne() ]);
+
+      res.send("La contraseña se ha reestablecido correctamente.")
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
 }
