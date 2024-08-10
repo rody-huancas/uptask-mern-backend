@@ -8,7 +8,7 @@ export interface IProject extends Document {
   description: string;
   tasks      : PopulatedDoc<ITask & Document>[];
   manager    : PopulatedDoc<IUser & Document>;
-  team       : PopulatedDoc<IUser & Document>;
+  team       : PopulatedDoc<IUser & Document>[];
 };
 
 const ProjectSchema: Schema = new Schema({

@@ -116,6 +116,13 @@ router.post("/:projectId/team/find",
     .isEmail().toLowerCase().withMessage("El correo electrónico no es válido"),
   handleInputErrors,
   TeamMemberController.findMemberByEmail
-)
+);
+
+router.post("/:projectId/team",
+  body("id")
+    .isMongoId().withMessage("ID No válido"),
+  handleInputErrors,
+  TeamMemberController.addMemberById
+);
 
 export default router;
