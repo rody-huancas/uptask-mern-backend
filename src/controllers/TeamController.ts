@@ -35,6 +35,16 @@ export class TeamMemberController {
     req.project.team.push(user.id);
     await req.project.save();
 
-    res.send("Usuario agregado correctamente")
+    res.send("Usuario agregado correctamente");
+  };
+
+  static removeMemberById = async (req: Request, res: Response) => {
+    const { id } = req.body;
+
+    req.project.team = req.project.team.filter(teamMember => teamMember.toString() !== id);
+
+    await req.project.save();
+    
+    res.send("Usuario eliminado correctamente");
   };
 }
