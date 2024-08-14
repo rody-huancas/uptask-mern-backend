@@ -15,8 +15,7 @@ export interface ITask extends Document {
   description: string;
   project    : Types.ObjectId;
   status     : TaskStatus;
-  completedBy: Types.ObjectId;
-
+  completedBy: { user: Types.ObjectId, status: TaskStatus }[];
 }
 
 const TaskSchema: Schema = new Schema(
@@ -25,7 +24,12 @@ const TaskSchema: Schema = new Schema(
     description: { type: String, required: true, trim: true },
     project    : { type: Types.ObjectId, ref: "Project" },
     status     : { type: String, enum: Object.values(taskStatus), default: taskStatus.PENDING},
-    completedBy: { type: Types.ObjectId, ref: "User", default: true }
+    completedBy: [
+      {
+        user: { type: Types.ObjectId, ref: "User", default: null },
+        status: { type: String, enum: Object.values(taskStatus), default: taskStatus.PENDING},
+      }
+    ]
   },
   { timestamps: true }
 );
