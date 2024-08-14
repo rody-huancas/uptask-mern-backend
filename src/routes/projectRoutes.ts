@@ -6,8 +6,8 @@ import { projectExists } from "../middleware/project";
 import { TaskController } from "../controllers/TaskController";
 import { ProjectController } from "../controllers/ProjectController";
 import { handleInputErrors } from "../middleware/validation";
-import { hasAuthorization, taskBelongsToProject, taskExists } from "../middleware/task";
 import { TeamMemberController } from "../controllers/TeamController";
+import { hasAuthorization, taskBelongsToProject, taskExists } from "../middleware/task";
 
 const router = Router();
 
@@ -101,9 +101,6 @@ router.delete(
   TaskController.deleteTask
 );
 
-router.param('taskId', taskExists)
-router.param('taskId', taskBelongsToProject)
-
 router.post(
   '/:projectId/tasks/:taskId/status',
   param("taskId").isMongoId().withMessage("ID no válido"),
@@ -112,6 +109,9 @@ router.post(
   handleInputErrors,
   TaskController.updateStatus
 );
+
+router.param('taskId', taskExists)
+router.param('taskId', taskBelongsToProject)
 
 // Routes for team
 router.post("/:projectId/team/find",
