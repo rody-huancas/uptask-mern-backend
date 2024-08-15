@@ -2,7 +2,7 @@ import { transporter } from "../config/nodemailer";
 
 interface IEmail {
   email: string;
-  name: string;
+  name : string;
   token: string;
 }
 

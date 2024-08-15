@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+
 import Note, { INote } from "../models/Note";
 
 export class NoteController {

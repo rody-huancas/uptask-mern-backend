@@ -4,11 +4,11 @@ import { body, param } from "express-validator";
 import { authenticate } from "../middleware/auth";
 import { projectExists } from "../middleware/project";
 import { TaskController } from "../controllers/TaskController";
+import { NoteController } from "../controllers/NoteController";
 import { ProjectController } from "../controllers/ProjectController";
 import { handleInputErrors } from "../middleware/validation";
 import { TeamMemberController } from "../controllers/TeamController";
 import { hasAuthorization, taskBelongsToProject, taskExists } from "../middleware/task";
-import { NoteController } from "../controllers/NoteController";
 
 const router = Router();
 
