@@ -8,6 +8,7 @@ import { ProjectController } from "../controllers/ProjectController";
 import { handleInputErrors } from "../middleware/validation";
 import { TeamMemberController } from "../controllers/TeamController";
 import { hasAuthorization, taskBelongsToProject, taskExists } from "../middleware/task";
+import { NoteController } from "../controllers/NoteController";
 
 const router = Router();
 
@@ -138,5 +139,13 @@ router.delete("/:projectId/team/:userId",
   handleInputErrors,
   TeamMemberController.removeMemberById
 );
+
+// Routes for Notes
+router.post('/:projectId/tasks/:taskId/notes', 
+  body("content")
+    .notEmpty().withMessage("El Contenido de la nota es obligatorio."),
+  handleInputErrors,
+  NoteController.createNote
+)
 
 export default router;
