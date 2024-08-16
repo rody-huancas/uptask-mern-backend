@@ -146,10 +146,16 @@ router.post('/:projectId/tasks/:taskId/notes',
     .notEmpty().withMessage("El Contenido de la nota es obligatorio."),
   handleInputErrors,
   NoteController.createNote
-)
+);
 
 router.get('/:projectId/tasks/:taskId/notes', 
   NoteController.getTaskNotes
-)
+);
+
+router.delete('/:projectId/tasks/:taskId/notes/:noteId', 
+  param("noteId").isMongoId().withMessage("ID no válido"),
+  handleInputErrors,
+  NoteController.deleteNote
+);
 
 export default router;
