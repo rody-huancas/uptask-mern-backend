@@ -78,6 +78,19 @@ router.post('/update-password/:token',
 router.get('/user',
   authenticate,
   AuthController.user
-)
+);
+
+// Profile
+
+router.put('/profile',
+  authenticate,
+  body("name")
+    .notEmpty().withMessage("El nombre no puede ir vacío"),
+  body("email")
+    .isEmail().withMessage("El correo electrónico no es válido"),
+  handleInputErrors,
+  AuthController.updateProfile
+);
+
 
 export default router;
