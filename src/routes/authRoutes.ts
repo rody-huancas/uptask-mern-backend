@@ -81,7 +81,6 @@ router.get('/user',
 );
 
 // Profile
-
 router.put('/profile',
   authenticate,
   body("name")
@@ -90,6 +89,22 @@ router.put('/profile',
     .isEmail().withMessage("El correo electrónico no es válido"),
   handleInputErrors,
   AuthController.updateProfile
+);
+
+router.post('/update-password',
+  authenticate,
+  body("current_password")
+    .notEmpty().withMessage("La contraseña actual no puede ir vacío"),
+  body("password")
+    .isLength({ min: 8 }).withMessage("La contraseña es muy corta, mínimo 8 caracteres"),
+  body("password_confirmation").custom((value, { req }) => {
+    if (req.body.password !== value) {
+      throw new Error("Las contraseñas no son iguales");
+    }
+    return true;
+  }),
+  handleInputErrors,
+  AuthController.updateCurrentUserPassword
 );
 
 
