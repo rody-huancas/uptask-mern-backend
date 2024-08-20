@@ -28,16 +28,11 @@ const TaskSchema: Schema = new Schema(
     status     : { type: String, enum: Object.values(taskStatus), default: taskStatus.PENDING},
     completedBy: [
       {
-        user: { type: Types.ObjectId, ref: "User", default: null },
+        user  : { type: Types.ObjectId, ref: "User", default: null },
         status: { type: String, enum: Object.values(taskStatus), default: taskStatus.PENDING},
       }
     ],
-    notes: [
-      {
-        type: Types.ObjectId,
-        ref: "Note",
-      }
-    ]
+    notes: [{ type: Types.ObjectId, ref: "Note" }]
   },
   { timestamps: true }
 );
